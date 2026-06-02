@@ -75,7 +75,7 @@
 
 完整的飞书妙记 URL：
 ```
-https://acnxeotramzf.feishu.cn/minutes/obcnyjz3m7ass8vwkchra651
+https://<your-domain>.feishu.cn/minutes/<minute-token>
 ```
 
 ## 汇总文档追加格式
