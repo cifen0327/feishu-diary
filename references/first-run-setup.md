@@ -51,7 +51,14 @@ lark-cli base +view-set-sort --base-token <token> --table-id <table_id> \
   --json '{"sort_config":[{"field":"日期","desc":true}]}'
 ```
 
-如果验证通过，将所有配置写入 Memory：
+如果验证通过，用 Write 工具将以下内容写入当前项目的 Claude Code Memory 目录：
+
+**写入路径**：`<当前项目 Memory 目录>/feishu-diary-config.md`
+
+> 提示：先用 Glob 查找 `**/MEMORY.md` 定位 Memory 目录，然后在同目录下创建 `feishu-diary-config.md`。
+> 如果找不到 Memory 目录，创建 `~/.claude/projects/<当前项目>/memory/feishu-diary-config.md`。
+
+**写入内容**（将 `<...>` 替换为实际值）：
 
 ```markdown
 ---
@@ -84,8 +91,6 @@ metadata:
 
 ### 偏好
 - 妙记链接字段可点击查看逐字稿，无需额外写入逐字稿链接字段
-
-关联: [[diary-base-index]]
 ```
 
 ### 5. 完成

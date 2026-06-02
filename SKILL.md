@@ -51,11 +51,18 @@ description: >-
 
 ### 1.2 检查 Memory 配置
 
-读取 Claude Code Memory 中的 `feishu-diary-config`。
+用 Glob 搜索当前项目 Memory 目录下的 `feishu-diary-config.md`：
+
+```bash
+Glob: **/feishu-diary-config.md  (在 ~/.claude/projects 下搜索)
+```
+
+或在对话上下文中检查是否已加载 `feishu-diary-config` 内容。
 
 **如果配置不存在**：
 - 阅读并执行 `references/first-run-setup.md` 中的首次配置流程
-- 配置完成后重新进入主流程
+- 首次配置完成后用 Write 工具将配置写入 Memory 目录
+- 重新进入主流程
 
 **如果配置存在**：
 - 从 Memory 中提取 Base Token、Table ID、汇总文档 Token、标题格式、字段映射
@@ -77,11 +84,8 @@ lark-cli base +record-list --base-token <token> --table-id <table_id> --as user 
 
 如果 `has_more=true`，继续翻页直到拉取全量。
 
-从结果中提取两个排重集合：
-- `known_links`：所有已存在的妙记链接（精确排重）
-- `known_keys`：所有「日期+标题」组合（模糊排重）
-
-日期比较时只取日期部分（`YYYY-MM-DD`），忽略时间。
+从结果中提取排重集合：
+- `known_links`：所有已存在的妙记链接，用于精确排重
 
 ### 2.2 搜索妙记
 
@@ -99,12 +103,11 @@ lark-cli minutes +search --as user --query "<今天的日期数字>" --page-size
 
 | 判断条件 | 处理 |
 |---------|------|
-| 妙记链接 URL 在 `known_links` 中 | **跳过**（精确命中） |
-| 日期+标题在 `known_keys` 中 | **跳过**（模糊命中） |
+| 妙记链接 URL 在 `known_links` 中 | **跳过**（已归档） |
 | 标题不匹配用户配置的日记格式 | **跳过**（非日记内容） |
 | 以上都不满足 | ✅ **新日记，需要归档** |
 
-**重要**：同一天但标题不同的妙记，都要保留（同一天可以有多篇日记）。
+**重要**：同一天可以有多条日记，即使日期和标题都相同也各自独立保留。排重仅靠妙记链接精确匹配。
 
 如果「新条目」数量为 0，告知用户暂无新日记需要归档，终止并等待下一个任务。
 
