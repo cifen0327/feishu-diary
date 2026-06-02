@@ -249,7 +249,9 @@ lark-cli docs +update --api-version v2 --as user --doc <汇总文档token> \
 
 ## 日常对话中的日记引用
 
-当用户在非归档场景中提到日记相关内容时，利用 Memory 中的 `feishu-diary-config` 自动查询：
+当用户在非归档场景中提到日记相关内容时，skill 的 description 会自动触发。
+
+**前提**：`feishu-diary-config` 已在 MEMORY.md 中注册，会话启动时由 Memory 系统自动加载到上下文。
 
 **示例场景**：
 - 「我上次日记里提到的那个面试怎么样了」
@@ -257,12 +259,15 @@ lark-cli docs +update --api-version v2 --as user --doc <汇总文档token> \
 - 「我 5 月的关键词有哪些」
 
 **执行方式**：
-1. 从 Memory 读取 Base Token 和字段映射
-2. 搜索 Base 记录（关键词搜索或日期筛选）
-3. 返回匹配记录的相关字段内容
+1. skill 被触发后，从已加载的 Memory 上下文读取 Base Token、字段映射
+2. 用 `lark-cli base +record-search` 按关键词搜索，或按日期筛选
+3. 读取匹配记录的 Done List / 灵感与感悟 / 摘要字段
 4. 结合用户当前问题，做上下文关联回复
 
-无需用户显式说"整理日记"，只要提到日记/Done List/灵感等关键词，就能利用 Base 数据辅助对话。
+**实现原理**：
+- 首次配置时，`first-run-setup.md` 引导 AI 将 `feishu-diary-config.md` 写入 Memory 目录，并在 `MEMORY.md` 中注册引用
+- 后续每次新会话，Claude Code 自动加载 `MEMORY.md` 中列出的所有 memory 文件
+- 用户提到日记时，skill 被触发，直接从当前上下文中读取配置，无需用户重复说明
 
 ---
 
