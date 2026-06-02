@@ -134,23 +134,27 @@ feishu-diary/
 
 ---
 
-## FAQ
+## 整理后效果
 
-### 需要付费吗？
+### 多维表格
 
-完全免费。依赖飞书多维表格和妙记的免费额度，不涉及任何付费 API。
+每次整理的日记以一条新记录写入，按日期倒序排列（最新在第一行）：
 
-### 我的数据安全吗？
+| 标题 | 日期 | Done List | 灵感与感悟 | 关键词 |
+|------|------|-----------|-----------|--------|
+| 6.2 | 2026-06-02 | ✅ 完成 feishu-diary skill 编写<br>✅ 测试归档效果 | 💡 把重复性工作流固化为skill能极大提升效率 | feishu-diary, skill, 日记归档 |
+| 6.1 | 2026-06-01 | ✅ 完成阶跃星辰面试准备<br>✅ Cloud Code 接入 VS Code<br>… | 💡 面试很多时候只是走流程<br>💡 蓝标面试官真诚告知 dirty work 但愿意画饼也是尊重<br>… | 新媒体, 面试, 编程, VS Code |
+| 5.30 | 2026-05-30 | ✅ 实习结束<br>✅ 论文查重通过<br>… | 💡 多表达多分享信息——成本低，能带来机会<br>… | 实习离职, 论文查重, 小红书 |
 
-所有数据存储在你自己的飞书多维表格和文档中，AI 仅在本地提取内容后写入，不上传任何数据到第三方。
+### 汇总文档
 
-### 可以多人使用吗？
+两个独立的飞书文档，按日期倒序（最新在最前），样式为 `<h2>` 标题 + `<ul>` 列表。
 
-可以。每人独立配置自己的 Base 和文档，skill 支持通用适配。
+**Done List 汇总**：只列出每天完成了什么
 
-### 同一天有多条日记会怎样？
+**灵感与感悟汇总**：只列出每天的思想碎片和洞察
 
-每条独立记录，不会相互覆盖。
+同一天多条日记各自独立，不会互相覆盖。
 
 ---
 
@@ -174,11 +178,20 @@ git clone https://github.com/cifen0327/feishu-diary.git
 
 Then say "整理日记" in Claude Code. The skill guides through one-time setup.
 
-### Requirements
+### Output Format
 
-- Feishu CLI (`@larksuite/cli`)
-- Feishu skill packs: `lark-minutes`, `lark-base`, `lark-doc`
-- A Feishu Base and two summary documents for storage
+Each diary entry is written as a new row in the Base table, sorted by date descending:
+
+| Field | Format |
+|-------|--------|
+| Date | Datetime of the Feishu Minute recording |
+| Title | Date-based (e.g., `6.2`) |
+| Done List | `✅ ` prefixed, one action per line |
+| Insights | `💡 ` prefixed, original wording from transcript |
+| Keywords | 3-5 comma-separated tags |
+| Summary | One sentence, semicolon-separated key events |
+
+Two summary documents are also maintained, using `## Title · Date` headings with `- bullet` lists, newest first.
 
 ### License
 
